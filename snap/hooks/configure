@@ -1,0 +1,10 @@
+#! /bin/sh
+
+[ -e "/etc/opennds/opennds.conf" ] || cp -a $SNAP/etc/opennds/* /etc/opennds/
+
+if ! snapctl is-connected firewall-control; then
+    logger -t $SNAP_NAME "please run snap connect $SNAP_NAME:firewall-control"
+fi
+if ! snapctl is-connected network-observe; then
+    logger -t $SNAP_NAME "please run snap connect $SNAP_NAME:network-observe"
+fi

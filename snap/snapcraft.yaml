@@ -1,0 +1,81 @@
+name: opennds
+base: core20
+adopt-info: opennds
+summary: a high performance, small footprint Captive Portal
+description: |
+  openNDS (NDS) is a high performance, small footprint Captive Portal,
+  offering by default a simple splash page restricted Internet
+  connection, yet incorporates an API that allows the creation of
+  sophisticated authentication applications.
+
+grade: stable
+confinement: strict
+
+apps:
+  opennds:
+    command: usr/bin/opennds
+    daemon: forking
+    install-mode: disable
+    plugs:
+      - firewall-control
+      - mount-observe
+      - network
+      - network-bind
+      - network-control
+      - system-observe
+  ndsctl:
+    command: usr/bin/ndsctl
+    plugs:
+      - mount-observe
+      - network
+      - network-bind
+      - system-observe
+
+layout:
+  /etc/opennds:
+    bind: $SNAP_COMMON/opennds
+  /usr/lib/opennds:
+    bind: $SNAP/usr/lib/opennds
+  /usr/sbin/xtables-legacy-multi:
+    bind-file: $SNAP/usr/sbin/xtables-legacy-multi
+
+parts:
+  libmicrohttpd:
+    source: https://ftp.gnu.org/gnu/libmicrohttpd/libmicrohttpd-latest.tar.gz
+    plugin: autotools
+    override-build: |
+      snapcraftctl build
+      cp COPYING $SNAPCRAFT_PART_INSTALL/libmicrohttpd-license
+    autotools-configure-parameters:
+      - --disable-https
+      - --prefix=/usr
+    prime:
+      - -usr/share
+      - -usr/include
+      - -usr/lib/pkgconfig
+      - -usr/lib/libmicrohttpd.la
+      - -usr/lib/libmicrohttpd.a
+  opennds:
+    after: [ libmicrohttpd ]
+    source: https://github.com/openNDS/openNDS.git
+    source-tag: v9.3.0
+    plugin: make
+    override-build: |
+      mkdir -p $SNAPCRAFT_PART_INSTALL/etc/systemd/system
+      snapcraftctl build
+      VER="$(grep "#define VERSION" src/conf.h | sed 's/^.* "//;s/".*$//')"
+      snapcraftctl set-version $VER
+      cp COPYING $SNAPCRAFT_PART_INSTALL/opennds-license
+      sed -i '/^#!\/bin\/bash/a exit 0' \
+          $SNAPCRAFT_PART_INSTALL/usr/lib/opennds/dnsconfig.sh
+    override-prime: |
+      cp $SNAPCRAFT_STAGE/usr/share/doc/iptables/copyright \
+          $SNAPCRAFT_PRIME/iptables-license
+      snapcraftctl prime
+    prime:
+      - -etc/systemd
+      - -usr/share/man
+      - -usr/share/doc
+      - -usr/share/doc-base
+    stage-packages:
+      - iptables

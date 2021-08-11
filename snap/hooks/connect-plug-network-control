@@ -1,0 +1,14 @@
+#! /bin/sh
+
+INTERFACES="firewall-control mount-observe system-observe"
+
+for iface in $INTERFACES; do
+    if ! snapctl is-connected $iface; then
+        logger -t $SNAP_NAME "$iface not connected yet, doing nothing"
+        exit 0
+    fi
+done
+
+logger -t $SNAP_NAME "all interfaces connected, starting $SNAP_NAME.$SNAP_NAME service"
+
+snapctl start --enable $SNAP_NAME.$SNAP_NAME
