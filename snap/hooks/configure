@@ -5,6 +5,12 @@
 if ! snapctl is-connected firewall-control; then
     logger -t $SNAP_NAME "please run snap connect $SNAP_NAME:firewall-control"
 fi
-if ! snapctl is-connected network-observe; then
-    logger -t $SNAP_NAME "please run snap connect $SNAP_NAME:network-observe"
+if ! snapctl is-connected network-control; then
+    logger -t $SNAP_NAME "please run snap connect $SNAP_NAME:network-control"
+fi
+if ! snapctl is-connected mount-observe; then
+    logger -t $SNAP_NAME "please run snap connect $SNAP_NAME:mount-observe"
+fi
+if ! snapctl is-connected system-observe; then
+    logger -t $SNAP_NAME "please run snap connect $SNAP_NAME:system-observe"
 fi
