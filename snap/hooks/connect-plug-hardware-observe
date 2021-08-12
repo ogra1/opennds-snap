@@ -1,6 +1,6 @@
 #! /bin/sh
 
-INTERFACES="network-control firewall-control mount-observe system-observe"
+INTERFACES="network-observe firewall-control mount-observe system-observe"
 
 for iface in $INTERFACES; do
     if ! snapctl is-connected $iface; then

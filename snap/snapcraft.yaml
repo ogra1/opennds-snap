@@ -18,7 +18,7 @@ description: |
       sudo snap connect opennds:firewall-control
       sudo snap connect opennds:hardware-observe
       sudo snap connect opennds:mount-observe
-      sudo snap connect opennds:network-control
+      sudo snap connect opennds:network-observe
       sudo snap connect opennds:system-observe
 
   After connecting these snap interfaces, the opennds daemon will start
@@ -39,7 +39,7 @@ apps:
       - mount-observe
       - network
       - network-bind
-      - network-control
+      - network-observe
       - system-observe
   ndsctl:
     command: usr/bin/ndsctl
