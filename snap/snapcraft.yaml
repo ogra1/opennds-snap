@@ -98,3 +98,4 @@ parts:
     stage-packages:
       - iptables
       - iw
+      - wget
