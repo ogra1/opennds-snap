@@ -97,3 +97,4 @@ parts:
       - -usr/share/doc-base
     stage-packages:
       - iptables
+      - iw
