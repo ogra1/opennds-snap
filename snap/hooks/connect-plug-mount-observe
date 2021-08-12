@@ -1,6 +1,6 @@
 #! /bin/sh
 
-INTERFACES="firewall-control network-control system-observe"
+INTERFACES="firewall-control network-control system-observe hardware-observe"
 
 for iface in $INTERFACES; do
     if ! snapctl is-connected $iface; then
