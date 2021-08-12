@@ -18,6 +18,7 @@ apps:
     install-mode: disable
     plugs:
       - firewall-control
+      - hardware-observe
       - mount-observe
       - network
       - network-bind
