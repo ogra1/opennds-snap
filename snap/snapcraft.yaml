@@ -40,6 +40,7 @@ apps:
       - network
       - network-bind
       - network-observe
+      - removable-media
       - system-observe
   ndsctl:
     command: usr/bin/ndsctl
